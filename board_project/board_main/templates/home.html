@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>board</title>
+    </head>
+
+    <body>
+        <ul>
+            <li>
+               <a href="/">home</a> 
+            </li>
+            <li>
+                <a href="/posts">게시판</a>                
+            </li>    
+            <li>
+                <a href="/authors">회원관리</a>
+            </li>
+        </ul>
+        
+        {% block contents %}
+        <!--이 부분에 자식 화면이 나오게 된다-->
+        {% endblock %}
+    </body>
+</html>

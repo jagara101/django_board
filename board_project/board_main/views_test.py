@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
+from .models import Test
 # Create your views here.
 
 #get요청시 html파일 그대로 return
@@ -49,10 +50,66 @@ def test_html_parameter_data2(request, my_id):
 
 def test_post_handle(request):
     if request.method =='POST':
-        name = request.POST['my_name']
-        email = request.POST['my_email']
-        password = request.POST['my_password']
-        print(name,email,password)
+        my_name = request.POST['my_name']
+        my_email = request.POST['my_email']
+        my_password = request.POST['my_password']
+       
+        #db에 insert->save함수 사용
+        #db에 테이블과sync가 맞는 Test라는 클래스에서 객체를 만들어 save
+        '''
+        t1=Test(my_name,my_email,my_password) 이런식으로도 가능하다
+        '''
+        t1=Test()
+        t1.name=my_name
+        t1.email=my_email
+        t1.password=my_password
+        t1.save()      
         return redirect('/') #localhost:8000로 간거랑 똑같음
     else:
         return render(request, 'test/test_post_form.html')
+    
+def test_select_one(request, my_id):
+    #단건만 조회할때 get() 함수 사용
+    t1=Test.objects.get(id=my_id)
+    return render(request, 'test/test_select_one.html', {'data':t1})
+
+def test_select_all(request):
+    #모든 데이터 조회(=select*from aaa;)는 all() 함수 사용
+    tests=Test.objects.all()
+    # print(type(tests)) 데이터 잘 들어갔는지 확인차
+    # for a in tests:
+    #     print(a.name)
+    return render(request, 'test/test_select_all.html',{'datas':tests})
+
+#where조건으로 다건을 조회할땐 filter()함수 사용
+#Test.object.filter(name=my_name) ->다건으로 가정
+def test_select_filter(request):
+    #localhost8000/test_select_filter?name=hongildong
+    my_name=request.GET.get('name')
+    tests=Test.objects.filter(name=my_name)
+    return render(request, 'test/test_select_filter.html',{'datas':tests})
+
+# update를 하기 위해서는 해당건을 사전에 조회하기 위한 id값이 필요
+# 메서드는 등록과 동일하게 save()함수 사용
+#save함수는 신규객체를 save하면 insert, 기존객체를 save하면 update
+def test_update(request):
+    if request.method =='POST':
+        my_id = request.POST['my_id']
+        t1=Test.objects.get(id=my_id)
+        my_name = request.POST['my_name']
+        my_email = request.POST['my_email']
+        my_password = request.POST['my_password']
+        print(type(my_id))
+        t1.name=my_name
+        t1.email=my_email   
+        t1.password=my_password
+
+        # 삭제는 delete()함수 사용. update와 마찬가지로 기존객체 조회 후 delete()
+        # t1.delete()를 하면 삭제
+        t1.save() 
+        return redirect('/')
+    else:
+        return render(request, 'test/test_update.html')
+
+
+     

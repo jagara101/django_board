@@ -1,0 +1,12 @@
+{% extends 'home.html' %}
+
+{% block contents %}
+<form method="POST">
+    {% csrf_token %}
+    이름:<input type="text" name="my_name"><br>
+    이메일:<input type="text" name="my_email"><br>
+    패스워드:<input type="text" name="my_password"><br>
+    <input type="submit" value="회원가입">
+</form>
+{% endblock %}
+           
