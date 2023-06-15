@@ -1,12 +1,20 @@
 {% extends 'home.html' %}
 
 {% block contents %}
+<h1>회원수정</h1>
 <form method="POST">
     {% csrf_token %}
-    이름:<input type="text" name="my_name" value={{author.name}}><br>
-    이메일:<input type="text" name="my_email" value={{author.email}}><br>
-    패스워드:<input type="text" name="my_password" value={{author.password}}><br>
-    <input type="submit" value="수정하기">
+    <div class="form-group">
+    이름<input type="text" name="my_name" class="form-control" value={{author.name}}>
+    </div>
+    <div class="form-group">
+    이메일<input type="text" name="my_email" class="form-control" value={{author.email}}>
+    </div>
+    <div class="form-group">
+    패스워드<input type="text" name="my_password" class="form-control" value={{author.password}}>
+    </div>
+    <input type="submit" value="수정하기" class="btn btn-primary">
+    <a href="/author/{{author.id}}" class="btn btn-secondary">전 단계로 돌아가기</a>
 </form>
 {% endblock %}
            
